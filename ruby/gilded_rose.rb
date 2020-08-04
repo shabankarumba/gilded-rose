@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), 'normal_item_rule')
+
 class GildedRose
 
   def initialize(items)
@@ -6,50 +8,28 @@ class GildedRose
 
   def update_quality()
     @items.each do |item|
-      if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
-        if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
-            item.quality = item.quality - 1
-          end
-        end
+      case item.name
+      when 'Aged Brie'
+        item_rule = NormalItemRule::AgedBrieItemRule.new(item)
+        item_rule.apply
+      when 'Sulfuras, Hand of Ragnaros'
+        item_rule = NormalItemRule::SulfurasItemRule.new(item)
+        item_rule.apply
+      when 'Backstage passes to a TAFKAL80ETC concert'
+        item_rule = NormalItemRule::BackStagePassItemRule.new(item)
+        item_rule.apply
+      when 'Conjured'
+        item_rule = NormalItemRule::ConjuredItemRule.new(item)
+        item_rule.apply
       else
-        if item.quality < 50
-          item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 11
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-            if item.sell_in < 6
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-          end
-        end
-      end
-      if item.name != "Sulfuras, Hand of Ragnaros"
-        item.sell_in = item.sell_in - 1
-      end
-      if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
-            if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
-                item.quality = item.quality - 1
-              end
-            end
-          else
-            item.quality = item.quality - item.quality
-          end
-        else
-          if item.quality < 50
-            item.quality = item.quality + 1
-          end
-        end
+        item_rule = NormalItemRule.new(item)
+        item_rule.apply
       end
     end
+  end
+
+  def apply_rule_to_item(rule)
+    rule.apply
   end
 end
 

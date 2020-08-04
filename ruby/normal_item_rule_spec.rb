@@ -1,19 +1,19 @@
 require File.join(File.dirname(__FILE__), 'gilded_rose')
-require File.join(File.dirname(__FILE__), 'item_rule')
+require File.join(File.dirname(__FILE__), 'normal_item_rule')
 
-describe ItemRule do
+describe NormalItemRule do
   let(:item_name) { 'Normal Item' }
   let(:quality) { 0 }
   let(:sell_in) { 0 }
   let(:item) { Item.new(item_name, sell_in, quality) }
   subject(:rule) { described_class.new(item) }
 
-  describe '#set_quality' do
+  describe '#apply' do
     context 'when the quality is 0' do
       let(:quality) { 0 }
 
       it 'does not change the quality' do
-        rule.set_quality
+        rule.apply
         expect(item.quality).to eq 0
       end
     end
@@ -22,7 +22,7 @@ describe ItemRule do
       let(:quality) { 50 }
 
       it 'does not change the quality' do
-        rule.set_quality
+        rule.apply
         expect(item.quality).to eq 50
       end
     end
@@ -32,7 +32,7 @@ describe ItemRule do
       let(:quality) { 10 }
 
       it 'reduces the quality twice as much' do
-        rule.set_quality
+        rule.apply
         expect(item.quality).to eq 8
       end
     end
