@@ -10,16 +10,16 @@ class GildedRose
     @items.each do |item|
       case item.name
       when 'Aged Brie'
-        item_rule = NormalItemRule::AgedBrieItemRule.new(item)
+        item_rule = AgedBrieItemRule.new(item)
         item_rule.apply
       when 'Sulfuras, Hand of Ragnaros'
-        item_rule = NormalItemRule::SulfurasItemRule.new(item)
+        item_rule = SulfurasItemRule.new(item)
         item_rule.apply
       when 'Backstage passes to a TAFKAL80ETC concert'
-        item_rule = NormalItemRule::BackStagePassItemRule.new(item)
+        item_rule = BackStagePassItemRule.new(item)
         item_rule.apply
       when 'Conjured'
-        item_rule = NormalItemRule::ConjuredItemRule.new(item)
+        item_rule = ConjuredItemRule.new(item)
         item_rule.apply
       else
         item_rule = NormalItemRule.new(item)

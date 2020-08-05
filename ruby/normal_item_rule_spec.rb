@@ -9,6 +9,15 @@ describe NormalItemRule do
   subject(:rule) { described_class.new(item) }
 
   describe '#apply' do
+    context 'when the quality is negative' do
+      let(:quality) { -1 }
+
+      it 'increases the quality to 0' do
+        rule.apply
+        expect(item.quality).to eq 0
+      end
+    end
+
     context 'when the quality is 0' do
       let(:quality) { 0 }
 
@@ -23,11 +32,20 @@ describe NormalItemRule do
 
       it 'does not change the quality' do
         rule.apply
-        expect(item.quality).to eq 50
+        expect(item.quality).to eq 48
       end
     end
 
-    context 'when the sell is less than or equal to 0' do
+    context 'when the quality is 51' do
+      let(:quality) { 51 }
+
+      it 'the quality stays the same' do
+        rule.apply
+        expect(item.quality).to eq(49)
+      end
+    end
+
+    context 'when the sell is less than 0' do
       let(:sell_in) { -1 }
       let(:quality) { 10 }
 
@@ -53,25 +71,37 @@ describe NormalItemRule do
     end
   end
 
-  describe NormalItemRule::AgedBrieItemRule do
+  describe AgedBrieItemRule do
     describe '#apply' do
-      let(:quality) { 1 }
-      let(:rule) { NormalItemRule::AgedBrieItemRule.new(item) }
+      let(:rule) { AgedBrieItemRule.new(item) }
 
-      it 'increases the quality by 1' do
-        rule.apply
-        expect(item.quality).to eq(3)
+      context 'when the quality is more than 0' do
+        let(:quality) { 1 }
+
+        it 'increases the quality by 2' do
+          rule.apply
+          expect(item.quality).to eq(3)
+        end
+      end
+
+      context 'when the quality is 50' do
+        let(:quality) { 50 }
+
+        it 'the quality stays the same' do
+          rule.apply
+          expect(item.quality).to eq(50)
+        end
       end
     end
   end
 
-  describe NormalItemRule::BackStagePassItemRule do
+  describe BackStagePassItemRule do
     let(:quality) { 5 }
     let(:item_name) { 'Backstage passes' }
-    subject(:rule) { NormalItemRule::BackStagePassItemRule.new(item) }
+    subject(:rule) { BackStagePassItemRule.new(item) }
 
     describe '#appyly' do
-      context 'when the concert is less than 10 days away' do
+      context 'when the concert is less or equal to 10 days' do
         let(:sell_in) { 10 }
 
         it 'increases the the quality by 2' do
@@ -80,7 +110,7 @@ describe NormalItemRule do
         end
       end
 
-      context 'when the concert is less than 10 days away' do
+      context 'when the concert is less or equal to 5 days' do
         let(:sell_in) { 5 }
 
         it 'increases the the quality by 3' do
@@ -89,7 +119,7 @@ describe NormalItemRule do
         end
       end
 
-      context 'when the concert is less than 10 days away' do
+      context 'when the concert is less than 0 days away' do
         let(:sell_in) { -1 }
 
         it 'increases the the quality by 3' do
@@ -97,10 +127,19 @@ describe NormalItemRule do
           expect(item.quality).to eq(0)
         end
       end
+
+      context 'when the quality is 50' do
+        let(:quality) { 50 }
+
+        it 'the the quality stays the same' do
+          rule.apply
+          expect(item.quality).to eq(50)
+        end
+      end
     end
   end
 
-  describe NormalItemRule::SulfurasItemRule do
+  describe SulfurasItemRule do
     let(:quality) { 80 }
     let(:item_name) { 'Backstage passes' }
     subject(:rule) { described_class.new(item) }
@@ -111,14 +150,14 @@ describe NormalItemRule do
         expect(item.quality).to eq 80
       end
 
-      it 'does not change the quality' do
+      it 'does not change the sell in' do
         rule.apply
         expect(item.sell_in).to eq 0
       end
     end
   end
 
-  describe NormalItemRule::ConjuredItemRule do
+  describe ConjuredItemRule do
     let(:quality) { 50 }
     let(:item_name) { 'Conjured' }
     subject(:rule) { described_class.new(item) }
@@ -127,13 +166,13 @@ describe NormalItemRule do
       context 'when the sell in has passed' do
         let(:sell_in) { 0 }
 
-        it 'quality degrades twice as fast' do
+        it 'quality degrades four times as fast' do
           rule.apply
           expect(item.quality).to eq 46
         end
       end
 
-      context 'when the sell in has passed' do
+      context 'when the sell in is 1 day away' do
         let(:sell_in) { 1 }
 
         it 'quality degrades twice as fast' do
