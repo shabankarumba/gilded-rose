@@ -21,14 +21,14 @@ describe GildedRose do
     it 'updates the items quality and sell in values' do
       subject.update_quality
       updated_items = items.map do |item|
-                        item.to_s
+        item.to_s
       end
 
       expect(updated_items).to eq([
-                                      "Aged Brie, -1, 3",
-                                      "Sulfuras, Hand of Ragnaros, 0, 80",
-                                      "Backstage passes to a TAFKAL80ETC concert, 0, 43",
-                                      "Conjured, 0, 38",
+                                    "Aged Brie, -1, 3",
+                                    "Sulfuras, Hand of Ragnaros, 0, 80",
+                                    "Backstage passes to a TAFKAL80ETC concert, 0, 43",
+                                    "Conjured, 0, 38",
                                   ])
     end
   end

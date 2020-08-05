@@ -38,7 +38,7 @@ class NormalItemRule
   def set_sell_in
     item.sell_in -= 1
   end
-  
+
   def above_minimum_quality?
     item.quality > MINIMUM_QUALITY
   end
@@ -46,6 +46,7 @@ class NormalItemRule
   def below_maximum_quality?
     item.quality < MAXIMUM_QUALITY
   end
+
 end
 
 class AgedBrieItemRule < NormalItemRule
@@ -64,7 +65,6 @@ class BackStagePassItemRule < NormalItemRule
 
   def set_quality
     sell_in = item.sell_in
-
 
     if sell_in < 0 && above_minimum_quality?
       item.quality = item.quality - item.quality
@@ -118,7 +118,6 @@ class ConjuredItemRule < NormalItemRule
     (item.sell_in <= 0) ? 4 : 2
   end
 end
-
 
 
 

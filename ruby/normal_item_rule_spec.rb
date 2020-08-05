@@ -30,7 +30,7 @@ describe NormalItemRule do
     context 'when the quality is 50' do
       let(:quality) { 50 }
 
-      it 'does not change the quality' do
+      it 'reduces the quality' do
         rule.apply
         expect(item.quality).to eq 48
       end
@@ -39,13 +39,13 @@ describe NormalItemRule do
     context 'when the quality is 51' do
       let(:quality) { 51 }
 
-      it 'the quality stays the same' do
+      it 'the quality is reduced' do
         rule.apply
         expect(item.quality).to eq(49)
       end
     end
 
-    context 'when the sell is less than 0' do
+    context 'when the sell in is less than 0' do
       let(:sell_in) { -1 }
       let(:quality) { 10 }
 
@@ -55,11 +55,11 @@ describe NormalItemRule do
       end
     end
 
-    context 'when the sell is more than 0' do
+    context 'when the sell in is more than 0' do
       let(:sell_in) { 1 }
       let(:quality) { 10 }
 
-      it 'does not change the quality' do
+      it 'reduces the quality' do
         rule.apply
         expect(item.quality).to eq 9
       end
@@ -73,7 +73,7 @@ describe NormalItemRule do
 
   describe AgedBrieItemRule do
     describe '#apply' do
-      let(:rule) { AgedBrieItemRule.new(item) }
+      let(:rule) { described_class.new(item) }
 
       context 'when the quality is more than 0' do
         let(:quality) { 1 }
@@ -98,7 +98,7 @@ describe NormalItemRule do
   describe BackStagePassItemRule do
     let(:quality) { 5 }
     let(:item_name) { 'Backstage passes' }
-    subject(:rule) { BackStagePassItemRule.new(item) }
+    subject(:rule) { described_class.new(item) }
 
     describe '#appyly' do
       context 'when the concert is less or equal to 10 days' do
@@ -183,6 +183,3 @@ describe NormalItemRule do
     end
   end
 end
-
-# Prevent quality going to less than 0
-# Refactor
